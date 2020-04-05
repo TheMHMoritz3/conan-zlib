@@ -8,4 +8,4 @@ else()
 endif()
 conan_basic_setup()
 
-add_subdirectory("source_subfolder")
+add_subdirectory("zlib-1.2.11")
