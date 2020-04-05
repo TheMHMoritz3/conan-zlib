@@ -17,7 +17,7 @@ class ZlibConan(ConanFile):
     default_options = {"shared": False, "fPIC": True, "minizip": False}
     exports_sources = ["CMakeLists.txt", "CMakeLists_minizip.txt", "minizip.patch"]
     generators = "cmake"
-    _source_subfolder = "source_subfolder"
+    _source_subfolder = "zlib-1.2.11"
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -28,18 +28,7 @@ class ZlibConan(ConanFile):
         del self.settings.compiler.cppstd
 
     def source(self):
-
-        try:
-            tools.get(**self.conan_data["sources"][self.version])
-        except ConanException:
-            tools.get(**self.conan_data["sources"]["{}_mirror".format(self.version)])
-
-        os.rename("{}-{}".format(self.name, self.version), self._source_subfolder)
-        if not tools.os_info.is_windows:
-            configure_file = os.path.join(self._source_subfolder, "configure")
-            st = os.stat(configure_file)
-            os.chmod(configure_file, st.st_mode | stat.S_IEXEC)
-        tools.patch(patch_file="minizip.patch", base_path=self._source_subfolder)
+       tools.get("http://www.zlib.net/zlib-1.2.11.tar.gz")
 
     def build(self):
         self._build_zlib()
